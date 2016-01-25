@@ -18,7 +18,7 @@ test.describe('Google Search', function() {
 
     var driver;
 
-    test.beforeEach(function() {
+    test.beforeEach(function(done) {
         var browser = process.env.BROWSER,
             version = process.env.VERSION,
             platform = process.env.PLATFORM,
@@ -38,6 +38,8 @@ test.describe('Google Search', function() {
 
         driver.getSession().then(function (sessionid){
             driver.sessionID = sessionid.id_;
+
+            done();
         });
 
     });
