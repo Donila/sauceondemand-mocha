@@ -24,7 +24,17 @@ module.exports = function (grunt) {
         }
     ];
 
+    // use browsers defined in Jenkins SauceOnDemand plugin section or defaultBrowsers
     var browsers = process.env.SAUCE_ONDEMAND_BROWSERS || defaultBrowsers;
+
+    // for single browser configuration
+    if(process.env.BROWSER && process.env.PLATFORM && process.env.VERSION) {
+        browsers = [{
+            "platform": process.env.PLATFORM,
+            "browser": process.env.BROWSER,
+            "browser-version": process.env.VERSION
+        }];
+    }
 
     console.log('browsers: ');
     console.log(JSON.stringify(browsers));
@@ -41,7 +51,8 @@ module.exports = function (grunt) {
         shell: {
             runTests: {
                 command: function(platform, browser, version) {
-                    return 'PLATFORM='+platform+' BROWSER='+browser+' VERSION='+version+' ./node_modules/.bin/mocha tests -R mocha-junit-reporter'
+                    var reportName = platform + '_' + browser + '_' + version + '.xml';
+                    return 'PLATFORM='+platform+' BROWSER='+browser+' VERSION='+version+' JUNIT_REPORT_PATH='+reportName+ ' JUNIT_REPORT_STACK=1' + ' ./node_modules/.bin/mocha tests -R mocha-jenkins-reporter || true'
                 }
             }
         },
