@@ -23,7 +23,11 @@ var defaultBrowsers = [
 ];
 
 // use browsers defined in Jenkins SauceOnDemand plugin section or defaultBrowsers
-var configBrowsers = process.env.SAUCE_ONDEMAND_BROWSERS || defaultBrowsers;
+var configBrowsers = defaultBrowsers;
+
+if(process.env.SAUCE_ONDEMAND_BROWSERS) {
+    configBrowsers = JSON.parse(process.env.SAUCE_ONDEMAND_BROWSERS);
+}
 
 // for single browser configuration
 if(process.env.BROWSER && process.env.PLATFORM && process.env.VERSION) {
