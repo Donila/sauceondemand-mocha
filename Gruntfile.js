@@ -49,10 +49,19 @@ module.exports = function (grunt) {
 
     grunt.initConfig({
         shell: {
+            options: {
+                stderr: false
+            },
             runTests: {
                 command: function(platform, browser, version) {
                     var reportName = platform + '_' + browser + '_' + version + '.xml';
-                    return 'PLATFORM='+platform+' BROWSER='+browser+' VERSION='+version+' JUNIT_REPORT_PATH='+reportName+ ' JUNIT_REPORT_STACK=1' + ' ./node_modules/.bin/mocha tests -R mocha-jenkins-reporter || true'
+                    var command =
+                        'PLATFORM='+platform+' BROWSER='+browser+' VERSION='+version+
+                        //' JUNIT_REPORT_PATH='+reportName+ ' JUNIT_REPORT_STACK=1' +
+                        //' ./node_modules/.bin/mocha tests -R mocha-jenkins-reporter || true';
+                            ' node index.js';
+                    console.log('Command: ' + command);
+                    return command;
                 }
             }
         },
