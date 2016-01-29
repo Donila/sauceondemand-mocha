@@ -1,4 +1,5 @@
 var exec = require('child_process').exec;
+var _ = require('lodash');
 
 var defaultBrowsers = [
     {
@@ -22,23 +23,21 @@ var defaultBrowsers = [
 ];
 
 // use browsers defined in Jenkins SauceOnDemand plugin section or defaultBrowsers
-var browsers = process.env.SAUCE_ONDEMAND_BROWSERS || defaultBrowsers;
+var configBrowsers = process.env.SAUCE_ONDEMAND_BROWSERS || defaultBrowsers;
 
 // for single browser configuration
 if(process.env.BROWSER && process.env.PLATFORM && process.env.VERSION) {
-    browsers = [{
+    configBrowsers = [{
         "platform": process.env.PLATFORM,
         "browser": process.env.BROWSER,
         "browser-version": process.env.VERSION
     }];
 }
 
-console.log('browsers: %s', browsers.length);
-console.log(browsers);
+console.log('browsers: %s', configBrowsers.length);
+console.log(configBrowsers);
 
-for(var i = 0; i < browsers.length; i++) {
-    var browser = browsers[i];
-
+_.each(configBrowsers, function(browser) {
     var command = 'node runner.js';
 
     var env = {
@@ -52,10 +51,10 @@ for(var i = 0; i < browsers.length; i++) {
     console.log('Executing: \'%s\' with env=%s', command, JSON.stringify(env));
 
     /*exec(command, { env: env }, function (err, stdout, stderr){
-        if (err) {
-            console.log("child processes failed with error code: " +
-                err.code);
-        }
-        console.log(stdout);
-    });*/
-};
+     if (err) {
+     console.log("child processes failed with error code: " +
+     err.code);
+     }
+     console.log(stdout);
+     });*/
+});
