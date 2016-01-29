@@ -33,7 +33,9 @@ if(process.env.BROWSER && process.env.PLATFORM && process.env.VERSION) {
     }];
 }
 
-browsers.forEach(function(browser) {
+for(var i = 0; i < browsers.length; i++) {
+    var browser = browsers[i];
+
     var command = 'node runner.js';
 
     var env = {
@@ -53,4 +55,4 @@ browsers.forEach(function(browser) {
         }
         console.log(stdout);
     });
-});
+};
