@@ -33,6 +33,9 @@ if(process.env.BROWSER && process.env.PLATFORM && process.env.VERSION) {
     }];
 }
 
+console.log('browsers: %s', browsers.length);
+console.log(browsers);
+
 for(var i = 0; i < browsers.length; i++) {
     var browser = browsers[i];
 
@@ -48,11 +51,11 @@ for(var i = 0; i < browsers.length; i++) {
 
     console.log('Executing: \'%s\' with env=%s', command, JSON.stringify(env));
 
-    exec(command, { env: env }, function (err, stdout, stderr){
+    /*exec(command, { env: env }, function (err, stdout, stderr){
         if (err) {
             console.log("child processes failed with error code: " +
                 err.code);
         }
         console.log(stdout);
-    });
+    });*/
 };
