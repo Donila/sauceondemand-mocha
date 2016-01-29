@@ -1,52 +1,56 @@
-var Mocha = require('mocha'),
-    fs = require('fs'),
-    path = require('path');
+var exec = require('child_process').exec;
 
-var fileName =
-    (process.env.BROWSER && process.env.PLATFORM && process.env.VERSION)
-        ? process.env.PLATFORM + process.env.BROWSER + process.env.VERSION + '.xml'
-        : 'results.xml';
-
-// Instantiate a Mocha instance.
-var mocha = new Mocha({
-    reporter: 'mocha-junit-reporter',
-    reporterOptions: {
-        mochaFile: fileName
+var defaultBrowsers = [
+    {
+        "os": "Linux",
+        "platform": "LINUX",
+        "browser": "chrome",
+        "browser-version": "47",
+        "long-name": "Google Chrome",
+        "long-version": "47.0.2526.73",
+        "url": "sauce-ondemand:?os=Linux&browser=chrome&browser-version=47&username=daniildziaruhin&access-key=5ff41c7f-e213-46d1-82a9-3ef39194ddca"
+    },
+    {
+        "os": "Windows 10",
+        "platform": "XP",
+        "browser": "firefox",
+        "browser-version": "43",
+        "long-name": "Firefox",
+        "long-version": "43.0.",
+        "url": "sauce-ondemand:?os=Windows 10&browser=firefox&browser-version=43&username=daniildziaruhin&access-key=5ff41c7f-e213-46d1-82a9-3ef39194ddca"
     }
-});
+];
 
-var testDir = 'tests';
+// use browsers defined in Jenkins SauceOnDemand plugin section or defaultBrowsers
+var browsers = process.env.SAUCE_ONDEMAND_BROWSERS || defaultBrowsers;
 
-// Add each .js file to the mocha instance
-fs.readdirSync(testDir).filter(function(file){
-    // Only keep the .js files
-    return file.substr(-3) === '.js';
+// for single browser configuration
+if(process.env.BROWSER && process.env.PLATFORM && process.env.VERSION) {
+    browsers = [{
+        "platform": process.env.PLATFORM,
+        "browser": process.env.BROWSER,
+        "browser-version": process.env.VERSION
+    }];
+}
 
-}).forEach(function(file){
-    mocha.addFile(
-        path.join(testDir, file)
-    );
-});
+browsers.forEach(function(browser) {
+    var command = 'node runner.js';
 
-console.log('Running with output to ' + fileName);
+    var env = {
+        'PLATFORM': browser.platform,
+        'BROWSER': browser.browser,
+        'VERSION': browser['browser-version'],
+        'SAUCE_USERNAME': process.env.SAUCE_USERNAME,
+        'SAUCE_ACCESS_KEY': process.env.SAUCE_ACCESS_KEY
+    };
 
-// Run the tests.
-mocha.run()
-    .on('test', function(test) {
-        console.log('Test started: '+test.title);
-    })
-    .on('test end', function(test) {
-        console.log('Test done: '+test.title);
-    })
-    .on('pass', function(test) {
-        console.log('Test passed');
-        console.log(test);
-    })
-    .on('fail', function(test, err) {
-        console.log('Test fail');
-        console.log(test);
-        console.log(err);
-    })
-    .on('end', function() {
-        console.log('All done');
+    console.log('Executing: \'%s\' with env=%s', command, JSON.stringify(env));
+
+    exec(command, { env: env }, function (err, stdout, stderr){
+        if (err) {
+            console.log("child processes failed with error code: " +
+                err.code);
+        }
+        console.log(stdout);
     });
+});

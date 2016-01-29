@@ -39,19 +39,21 @@ module.exports = function (grunt) {
     console.log('browsers: ');
     console.log(JSON.stringify(browsers));
 
+    var shellCommands = [];
+
     // configure tasks
     var browserTasks = [];
     for(var i = 0; i < browsers.length; i++) {
         var browser = browsers[i];
         var task = 'run_' + browser.platform + '_' + browser.browser + '_' + browser['browser-version'];
         browserTasks.push(task);
+
+        var command = 'PLATFORM='+browser.platform+' BROWSER='+browser.browser+' VERSION='+browser['browser-version']+' node index.js';
+        shellCommands.push({ cmd: command });
     }
 
     grunt.initConfig({
-        shell: {
-            options: {
-                stderr: false
-            },
+        /*shell: {
             runTests: {
                 command: function(platform, browser, version) {
                     var reportName = platform + '_' + browser + '_' + version + '.xml';
@@ -64,29 +66,26 @@ module.exports = function (grunt) {
                     return command;
                 }
             }
-        },
+        },*/
 
         parallel: {
             assets: {
-                options: {
-                    grunt: true
-                },
-                tasks: browserTasks
+                tasks: shellCommands
             }
         }
     });
 
     // load tasks
     grunt.loadNpmTasks('grunt-parallel');
-    grunt.loadNpmTasks('grunt-shell');
+    //grunt.loadNpmTasks('grunt-shell');
 
     // register tasks
     grunt.registerTask('default', ['parallel']);
 
-    for(var i = 0; i < browsers.length; i++) {
+    /*for(var i = 0; i < browsers.length; i++) {
         var browser = browsers[i];
         var command = 'shell:runTests:' + browser.platform + ':' + browser.browser + ':' + browser['browser-version'];
         var task = 'run_' + browser.platform + '_' + browser.browser + '_' + browser['browser-version'];
         grunt.registerTask(task, [command]);
-    }
+    }*/
 };
