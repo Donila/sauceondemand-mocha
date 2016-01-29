@@ -48,6 +48,7 @@ _.each(configBrowsers, function(browser) {
         'SAUCE_ACCESS_KEY': process.env.SAUCE_ACCESS_KEY
     };
 
+    console.log(browser);
     console.log('Executing: \'%s\' with env=%s', command, JSON.stringify(env));
 
     /*exec(command, { env: env }, function (err, stdout, stderr){
