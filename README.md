@@ -19,18 +19,19 @@ single browser configuration.
 
 # Configure in Jenkins
 install Jenkins plugins: 
- - https://wiki.jenkins-ci.org/display/JENKINS/GitHub+Plugin  
- - https://wiki.jenkins-ci.org/display/JENKINS/Sauce+OnDemand+Plugin  
- - https://wiki.jenkins-ci.org/display/JENKINS/JUnit+Plugin  
-configure GitHub and SauceLabs credentials (in Jenkins options)  
-create project and clone https://github.com/Donila/sauceondemand-mocha.git using Github plugin,  
-check "Sauce Labs Support" checkbox and choose browsers/os's you want to test  
-insert following shell command:  
+ https://wiki.jenkins-ci.org/display/JENKINS/GitHub+Plugin  
+ https://wiki.jenkins-ci.org/display/JENKINS/Sauce+OnDemand+Plugin  
+ https://wiki.jenkins-ci.org/display/JENKINS/JUnit+Plugin  
+ 
+Configure GitHub and SauceLabs credentials (in Jenkins options)  
+Create project and clone https://github.com/Donila/sauceondemand-mocha.git using Github plugin,  
+Check "Sauce Labs Support" checkbox and choose browsers/os's you want to test  
+Insert following shell command:  
 
-    export SAUCE_USERNAME=$SAUCE_USERNAME  
-    export SAUCE_ACCESS_KEY=$SAUCE_ACCESS_KEY  
-    npm install  
-    node index.js  
+>    export SAUCE_USERNAME=$SAUCE_USERNAME  
+>    export SAUCE_ACCESS_KEY=$SAUCE_ACCESS_KEY  
+>    npm install  
+>    node index.js  
     
 then build project
 
