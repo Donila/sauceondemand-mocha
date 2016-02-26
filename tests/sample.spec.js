@@ -60,14 +60,6 @@ test.describe('Google Search', function() {
         driver.quit();
     });
 
-    /*test.after(function(done) {
-        var onDemandOutputString = 'SauceOnDemandSessionID=' + driver.sessionID + ' job-name=' + this.currentTest.parent.title;
-
-        console.log(onDemandOutputString);
-
-        done();
-    });*/
-
     test.it('get google title', function() {
         driver.get('http://google.com');
 
